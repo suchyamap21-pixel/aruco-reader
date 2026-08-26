@@ -39,7 +39,7 @@ button:disabled{opacity:.55}
 <script src="https://cdn.jsdelivr.net/gh/damianofalcioni/js-aruco2@master/src/aruco.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/damianofalcioni/js-aruco2@master/src/dictionaries/aruco_4x4_1000.js"></script>
 <script>
-const CART={1:'A01',2:'A02',3:'A03',4:'A04',5:'A05',6:'A06',7:'A07',8:'A08',9:'A09',10:'A10',11:'B01',12:'B02',13:'B03',14:'B04',15:'B05',16:'B06',17:'B07',18:'B08',19:'B09',20:'B10'};
+function displayId(id){return String(id).padStart(2,'0');}
 const video=document.getElementById('video');
 const viewer=document.getElementById('viewer');
 const work=document.getElementById('work');
@@ -101,7 +101,6 @@ function drawMarker(corners,label){
   const shownH=work.height*scale;
   const ox=(r.width-shownW)/2;
   const oy=(r.height-shownH)/2;
-
   const pts=corners.map(p=>({x:ox+p.x*scale,y:oy+p.y*scale}));
 
   octx.beginPath();
@@ -160,14 +159,14 @@ function scan(){
       const m=markers[0];
       lastSeen=Date.now();
       lastCorners=m.corners;
-      lastLabel=CART[m.id]||('ID '+m.id);
+      lastLabel=displayId(m.id);
       drawMarker(lastCorners,lastLabel);
 
       if(m.id===lastId)hits++; else{lastId=m.id;hits=1;}
-      stat.textContent='候補 ID:'+m.id+'  '+hits+'/2';
+      stat.textContent='候補 ID:'+displayId(m.id)+'  '+hits+'/2';
       if(hits>=2){
         res.textContent=lastLabel;
-        stat.textContent='ID: '+m.id+' 検出';
+        stat.textContent='ID: '+displayId(m.id)+' 検出';
       }
     }else if(Date.now()-lastSeen>600){
       clearDetection();
